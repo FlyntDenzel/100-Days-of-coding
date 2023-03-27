@@ -5,6 +5,7 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     Animator animator;
+    Vector2 curr_movement;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +36,16 @@ public class movement : MonoBehaviour
         {
             animator.SetBool("IsRunning", false);
         }
+
+        // HandleRotation();
     }
+
+    // void HandleRotation(){
+    //     Vector3 current_position = transform.position;
+    //     Vector3 new_position = new Vector3(curr_movement.x,0,curr_movement.y);
+
+    //     Vector3 lookatPosiiton = current_position + new_position; 
+    //     transform.LookAt(lookatPosiiton);
+    // }
 
 }
