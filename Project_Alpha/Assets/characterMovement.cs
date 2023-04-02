@@ -55,7 +55,7 @@ public class characterMovement : MonoBehaviour
         Vector3 positionToLookAt;
 
         positionToLookAt.x = currentMovement.x;
-        positionToLookAt.y = 0.0f;
+        positionToLookAt.y = 0f;
         positionToLookAt.z = currentMovement.z;
 
         Quaternion currentRotaion = transform.rotation;
