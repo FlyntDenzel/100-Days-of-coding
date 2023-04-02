@@ -13,6 +13,7 @@ public class characterMovement : MonoBehaviour
 
     void Awake(){
         input = new PlayerInput();//creating instance of playerinput class
+        input.CharacterControls.Movement.performed += ctx => Debug.log(ctx.ReadValueAsObject());//callback funci=tion returning the current context of the player
     }
 
     // Start is called before the first frame update
@@ -32,7 +33,15 @@ public class characterMovement : MonoBehaviour
 
     void HandleMovement(){
         //getting parameter values from animator
-        bool isWalking = Input.GetBool(isWalkingHash);
-        bool isRunning = Input.GetBool(isRunningHash);
+        bool isWalking = animator.GetBool(isWalkingHash);
+        bool isRunning = animator.GetBool(isRunningHash);
+    }
+
+    void OnEnable(){
+        input.CharacterControls.Enable();
+    }
+
+    void OnDisable(){
+        input.CharacterControls.Disable();
     }
 }
