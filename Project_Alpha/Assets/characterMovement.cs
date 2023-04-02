@@ -36,6 +36,23 @@ public class characterMovement : MonoBehaviour
              isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0; 
     }
 
+     void HandleRotation(){
+        Vector3 positionToLookAt;
+
+        positionToLookAt.x = currentMovement.x;
+        positionToLookAt.y = 0.0f;
+        positionToLookAt.z = currentMovement.z;
+
+        Quaternion currentRotaion = transform.rotation;
+        
+
+        if (isMovementPressed)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);//creates new rotation based on where the player is looking
+            transform.rotation = Quaternion.Slerp(currentRotaion, targetRotation, rotationFactorPerFrame);
+        }
+    }
+
     void HandleAnimation(){
         bool isWalking = animator.GetBool("isWalking");
         bool isRunning = animator.GetBool("isRunning");
@@ -51,21 +68,6 @@ public class characterMovement : MonoBehaviour
         }
     }
 
-    void HandleRotation(){
-        Vector3 positionToLookAt;
-
-        positionToLookAt.x = currentMovement.x;
-        positionToLookAt.y = 0f;
-        positionToLookAt.z = currentMovement.z;
-
-        Quaternion currentRotaion = transform.rotation;
-
-        if (isMovementPressed)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);//creates new rotation based on where the player is looking
-            transform.rotation = Quaternion.Slerp(currentRotaion, targetRotation, rotationFactorPerFrame);
-        }
-    }
 
     // Update is called once per frame
     void Update()
