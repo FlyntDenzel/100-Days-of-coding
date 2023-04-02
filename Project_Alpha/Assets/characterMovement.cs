@@ -5,43 +5,82 @@ using UnityEngine.InputSystem;
 
 public class characterMovement : MonoBehaviour
 {
-    Animator animator;
     int isWalkingHash;
     int isRunningHash;
 
-    PlayerInput input;
+    PlayerInput playerInput;
+    CharacterController characterController;
+    Animator animator;
+
+
+    Vector2 currentMovementInput;
+    Vector3 currentMovement;
+    bool isMovementPressed;
+    float rotationFactorPerFrame = 1.0f;
 
     void Awake(){
-        input = new PlayerInput();//creating instance of playerinput class
-        input.CharacterControls.Movement.performed += ctx => Debug.log(ctx.ReadValueAsObject());//callback funci=tion returning the current context of the player
+        playerInput = new PlayerInput();//creating instance of playerinput class
+        characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+
+        //callback funci=tion returning the current context of the player
+        playerInput.CharacterControls.Move.started += OnMovementInput;
+        playerInput.CharacterControls.Move.canceled += OnMovementInput; 
+             
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        animator = GetComponent<Animator>();
-        isWalkingHash = Animator.StringToHash("isWalking");
-        isRunningHash = Animator.StringToHash("isRunning");
+    void OnMovementInput(InputAction.CallbackContext context){
+        currentMovementInput = context.ReadValue<Vector2>(); 
+             currentMovement.x = currentMovementInput.x;
+             currentMovement.z = currentMovementInput.y;//player controls movement x and z axis
+             isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0; 
+    }
 
+    void HandleAnimation(){
+        bool isWalking = animator.GetBool("isWalking");
+        bool isRunning = animator.GetBool("isRunning");
+
+        if (isMovementPressed && !isWalking)
+        {
+            animator.SetBool("isWalking", true);
+        }
+
+        else if (!isMovementPressed && isWalking)
+        {
+            animator.SetBool("isWalking", false);
+        }
+    }
+
+    void HandleRotation(){
+        Vector3 positionToLookAt;
+
+        positionToLookAt.x = currentMovement.x;
+        positionToLookAt.y = 0.0f;
+        positionToLookAt.z = currentMovement.z;
+
+        Quaternion currentRotaion = transform.rotation;
+
+        if (isMovementPressed)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);//creates new rotation based on where the player is looking
+            transform.rotation = Quaternion.Slerp(currentRotaion, targetRotation, rotationFactorPerFrame);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        HandleRotation();
+        HandleAnimation();
+        characterController.Move(currentMovement * Time.deltaTime);//passing constantly updated char movement
     }
 
-    void HandleMovement(){
-        //getting parameter values from animator
-        bool isWalking = animator.GetBool(isWalkingHash);
-        bool isRunning = animator.GetBool(isRunningHash);
-    }
 
     void OnEnable(){
-        input.CharacterControls.Enable();
+        playerInput.CharacterControls.Enable();
     }
 
     void OnDisable(){
-        input.CharacterControls.Disable();
+        playerInput.CharacterControls.Disable();
     }
 }
