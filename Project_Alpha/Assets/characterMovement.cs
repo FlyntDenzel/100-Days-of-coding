@@ -86,3 +86,5 @@ public class characterMovement : MonoBehaviour
         playerInput.CharacterControls.Disable();
     }
 }
+
+// its all about the commits you know if i do something like this then it must be erad
