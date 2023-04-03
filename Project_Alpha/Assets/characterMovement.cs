@@ -36,6 +36,7 @@ public class characterMovement : MonoBehaviour
              isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0; 
     }
 
+    //have to find a way to make the rotation possible
      void HandleRotation(){
         Vector3 positionToLookAt;
 
@@ -87,4 +88,4 @@ public class characterMovement : MonoBehaviour
     }
 }
 
-// its all about the commits you know if i do something like this then it must be erad
+
