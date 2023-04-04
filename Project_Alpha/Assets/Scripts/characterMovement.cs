@@ -16,7 +16,7 @@ public class characterMovement : MonoBehaviour
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     bool isMovementPressed;
-    float rotationFactorPerFrame = 1.0f;
+    float rotationFactorPerFrame = 15.0f;
 
     void Awake(){
         playerInput = new PlayerInput();//creating instance of playerinput class
@@ -29,6 +29,23 @@ public class characterMovement : MonoBehaviour
              
     }
 
+    void HandleRotation(){
+        Vector3 positionToLookAt;
+        positionToLookAt.x = currentMovement.x;
+        positionToLookAt.y = 0;//keeps a value of zero for y axis to prevent character from going upwards
+        positionToLookAt.z = currentMovement.z; 
+
+        Quaternion currentRotation = transform.rotation;
+
+        if (isMovementPressed)
+        {
+
+        Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);//creates a rotation based on where the player is pressing
+        transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
+        }
+
+    }
+
     void OnMovementInput(InputAction.CallbackContext context){
         currentMovementInput = context.ReadValue<Vector2>(); 
              currentMovement.x = currentMovementInput.x;
@@ -37,23 +54,7 @@ public class characterMovement : MonoBehaviour
     }
 
     //have to find a way to make the rotation possible
-     void HandleRotation(){
-        Vector3 positionToLookAt;
-
-        positionToLookAt.x = currentMovement.x;
-        positionToLookAt.y = 0.0f;
-        positionToLookAt.z = currentMovement.z;
-
-        Quaternion currentRotaion = transform.rotation;
-        
-
-        if (isMovementPressed)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);//creates new rotation based on where the player is looking
-            transform.rotation = Quaternion.Slerp(currentRotaion, targetRotation, rotationFactorPerFrame);
-        }
-    }
-
+     
     void HandleAnimation(){
         bool isWalking = animator.GetBool("isWalking");
         bool isRunning = animator.GetBool("isRunning");
@@ -68,7 +69,6 @@ public class characterMovement : MonoBehaviour
             animator.SetBool("isWalking", false);
         }
     }
-
 
     // Update is called once per frame
     void Update()
