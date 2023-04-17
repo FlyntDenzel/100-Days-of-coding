@@ -12,7 +12,6 @@ public class characterMovement : MonoBehaviour
     CharacterController characterController;
     Animator animator;
 
-
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     bool isMovementPressed;
@@ -69,6 +68,7 @@ public class characterMovement : MonoBehaviour
             animator.SetBool("isWalking", false);
         }
     }
+
 
     // Update is called once per frame
     void Update()
