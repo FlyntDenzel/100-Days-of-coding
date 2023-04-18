@@ -18,13 +18,15 @@ public class AnimationAndMovementController : MonoBehaviour
     bool isMovementPressed;
     //since character doesnt jump when game is started
     bool isJumpPressed = false;
+    bool isJumping = false;
 
     float initialJumpVelocity;
-    float maxJumpHeight;
-    float maxJumpTime;
+    public float maxJumpHeight = 10.0f;
+    public float maxJumpTime = 5.0f;
     float rotationFactorPerFrame = 8.0f;
     float runSpeed = 5.0f;
     float gravity = -9.8f;
+    float groundedGravity = -0.5f;
 
     void Awake() {
         playerInput = new PlayerInput();//instancing playerinput class   
@@ -43,6 +45,30 @@ public class AnimationAndMovementController : MonoBehaviour
 
         playerInput.CharacterControls.Jump.started += OnJump;
         playerInput.CharacterControls.Jump.canceled += OnJump;
+
+        SetupJumpAnimation();
+    }
+
+    void SetupJumpAnimation(){
+        float timeToApex = maxJumpTime/2;
+        gravity = (-2 * maxJumpHeight) / Mathf.Pow(timeToApex, 2);
+        initialJumpVelocity = (2 * maxJumpHeight) / timeToApex;
+
+    }
+
+    void HandleJump(){
+        if ((!isJumping && characterController.isGrounded && isJumpPressed))
+        {
+            animator.SetBool("isJumping", true);
+            isJumping = true;
+            //adding jump velocity to the moving and running values
+            currentMovement.y = initialJumpVelocity * 0.5f;
+            currentRunMovement.y = initialJumpVelocity * 0.5f;   
+        }
+        else if (!isJumpPressed && isJumping && characterController.isGrounded )
+        {
+            isJumping = false;
+        } 
         
     }
 
@@ -97,14 +123,18 @@ public class AnimationAndMovementController : MonoBehaviour
         //character controller considers itself "floating" or "jumping" when a value of zero is applied to the y axis 
         if (characterController.isGrounded)
         {
+            animator.SetBool("isJumping", false);
             float groundedGravity = -0.5f;
-            currentMovement.y = groundedGravity;
-            currentRunMovement.y = groundedGravity;
+            float previousYVelocity = currentMovement.y;
+            float newYVelocity = currentMovement.y + (gravity * Time.deltaTime);
+            float nextYVelocity = (previousYVelocity + newYVelocity) * 0.5f;
+            currentMovement.y = nextYVelocity;
+            currentRunMovement.y = nextYVelocity;
         }
 
         else {
-            currentMovement.y += gravity;
-            currentRunMovement.y += gravity; 
+            currentMovement.y += gravity * Time.deltaTime;
+            currentRunMovement.y += gravity * Time.deltaTime; 
         }
     }
 
@@ -144,6 +174,7 @@ public class AnimationAndMovementController : MonoBehaviour
         }
 
         HandleGravity();
+        HandleJump();
     }
 
     void OnEnable() {
@@ -155,4 +186,20 @@ public class AnimationAndMovementController : MonoBehaviour
         //disable the callback function
         playerInput.CharacterControls.Disable();    
     }
+
+   /** Vector3 ConvertToCameraSpace(Vector3 vectorToRotate){
+        Vector3 cameraForward = GetComponent<Camera>().main.transform.forward;
+        Vector3 cameraRight = GetComponent<Camera>().main.transform.right;
+
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+
+        cameraForward = cameraForward.normalized;
+        cameraRight = cameraRight.normalized;
+
+        Vector3 cameraForwardZ = vectorToRotate.z * cameraForward;
+        Vector3 cameraRightX = vectorToRotate.x * cameraRight;
+        Vector3 vectorRotateToCamera = cameraForwardZ + cameraRightX;
+        return vectorRotateToCamera;
+    }**/
 }
