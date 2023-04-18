@@ -16,9 +16,15 @@ public class AnimationAndMovementController : MonoBehaviour
     Vector3 currentRunMovement;
     bool isRunPressed;
     bool isMovementPressed;
+    //since character doesnt jump when game is started
+    bool isJumpPressed = false;
 
+    float initialJumpVelocity;
+    float maxJumpHeight;
+    float maxJumpTime;
     float rotationFactorPerFrame = 8.0f;
     float runSpeed = 5.0f;
+    float gravity = -9.8f;
 
     void Awake() {
         playerInput = new PlayerInput();//instancing playerinput class   
@@ -34,11 +40,19 @@ public class AnimationAndMovementController : MonoBehaviour
 
         playerInput.CharacterControls.Run.started += OnRun;
         playerInput.CharacterControls.Run.canceled += OnRun;
+
+        playerInput.CharacterControls.Jump.started += OnJump;
+        playerInput.CharacterControls.Jump.canceled += OnJump;
         
     }
 
     void OnRun(InputAction.CallbackContext context){
         isRunPressed = context.ReadValueAsButton();//stores button value of run action
+    }
+
+    void OnJump(InputAction.CallbackContext context){
+        isJumpPressed = context.ReadValueAsButton();
+        Debug.Log(isJumpPressed);
     }
 
     void OnMovementInput(InputAction.CallbackContext context){
@@ -79,6 +93,21 @@ public class AnimationAndMovementController : MonoBehaviour
         }
     }
 
+    void HandleGravity(){
+        //character controller considers itself "floating" or "jumping" when a value of zero is applied to the y axis 
+        if (characterController.isGrounded)
+        {
+            float groundedGravity = -0.5f;
+            currentMovement.y = groundedGravity;
+            currentRunMovement.y = groundedGravity;
+        }
+
+        else {
+            currentMovement.y += gravity;
+            currentRunMovement.y += gravity; 
+        }
+    }
+
     void handleRotation(){
         Vector3 positionToLookAt;
         //change in position in which our character should point to
@@ -113,6 +142,8 @@ public class AnimationAndMovementController : MonoBehaviour
         //enables the characterontroller through the currentmovement
         characterController.Move(currentMovement * Time.deltaTime);   
         }
+
+        HandleGravity();
     }
 
     void OnEnable() {
