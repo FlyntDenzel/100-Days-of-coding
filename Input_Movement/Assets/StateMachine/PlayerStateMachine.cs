@@ -32,7 +32,11 @@ public class PlayerStateMachine : MonoBehaviour
     PlayerStateFactory1 states;
     
     public PlayerBaseState CurrentState{get {return currentState;} set {currentState = value;}}
+    public Animator Animator {get{return animator;}}
+    public int IsJumping {set{isJumping = value; }}
+    public float currentMovementY {get{return currentMovement.y;} set{currentMovement.y =value;}}
     public bool IsjumpPressed { get {return isJumpPressed;}}
+
 
     //declaring a getter setter nethods
     void Awake() {
