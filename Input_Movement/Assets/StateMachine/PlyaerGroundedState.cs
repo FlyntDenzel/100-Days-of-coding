@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlyaerGroundedState : PlayerBaseState
 {
-    public PlyaerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory1 playerStateFactory){
+    public PlyaerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory1 playerStateFactory) : base(currentContext, playerStateFactory)
+    {
         
     }
 
@@ -12,7 +13,7 @@ public class PlyaerGroundedState : PlayerBaseState
         Debug.Log("grounded");
     }
     public override void UpdateState(){
-        
+        CheckSwitchState();
     }
     public override void ExitState(){
         
@@ -20,7 +21,7 @@ public class PlyaerGroundedState : PlayerBaseState
     public override void CheckSwitchState(){
         if (ctx.IsjumpPressed)
         {
-            SwitchState(factory.Jumpm());
+            SwitchState(factory.Jumping());
         }
     }
     public override void InitializeSubState(){

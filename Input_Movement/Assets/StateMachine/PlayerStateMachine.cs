@@ -33,8 +33,9 @@ public class PlayerStateMachine : MonoBehaviour
     
     public PlayerBaseState CurrentState{get {return currentState;} set {currentState = value;}}
     public Animator Animator {get{return animator;}}
-    public int IsJumping {set{isJumping = value; }}
+    public bool IsJumping {set{isJumping = value; }}
     public float currentMovementY {get{return currentMovement.y;} set{currentMovement.y =value;}}
+    public float InitialJumpVelocity {get {return initialJumpVelocity;}}
     public bool IsjumpPressed { get {return isJumpPressed;}}
 
 
@@ -84,6 +85,7 @@ public class PlayerStateMachine : MonoBehaviour
     void Update()
     {
          handleRotation();
+         currentState.UpdateState();
          characterController.Move(currentRunMovement * Time.deltaTime);
     }
 

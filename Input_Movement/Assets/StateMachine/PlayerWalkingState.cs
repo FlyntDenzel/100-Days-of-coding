@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerWalkingState : PlayerBaseState
 {
-    public PlayerWalkingState(PlayerStateMachine currentContext, PlayerStateFactory1 playerStateFactory){
+    public PlayerWalkingState(PlayerStateMachine currentContext, PlayerStateFactory1 playerStateFactory) : base(currentContext, playerStateFactory)
+    {
         
     }
 

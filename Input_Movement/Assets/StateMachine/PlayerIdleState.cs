@@ -11,7 +11,7 @@ public class PlayerIdleState : PlayerBaseState
 
     }
     public override void UpdateState(){
-
+        CheckSwitchState();
     }
     public override void ExitState(){
 

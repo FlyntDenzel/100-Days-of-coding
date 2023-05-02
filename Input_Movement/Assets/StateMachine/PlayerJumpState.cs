@@ -13,7 +13,7 @@ public class PlayerJumpState : PlayerBaseState
         HandleJump();
     }
     public override void UpdateState(){
-        
+        CheckSwitchState();
     }
     public override void ExitState(){
         
@@ -24,15 +24,13 @@ public class PlayerJumpState : PlayerBaseState
     public override void InitializeSubState(){
         
     }   
-    void HandleJump(){
-        if ((!isJumping && characterController.isGrounded && isJumpPressed))
-        {
-            animator.SetBool("isJumping", true);
-            isJumping = true;
+    void HandleJump(){       
+            ctx.Animator.SetBool("isJumping", true);
+            ctx.IsJumping = true;
             //adding jump velocity to the moving and running values
-            currentMovement.y = initialJumpVelocity * 0.5f;
-            currentRunMovement.y = initialJumpVelocity * 0.5f;   
-        }
+            ctx.currentMovementY = ctx.InitialJumpVelocity * 0.5f;
+            ctx.currentMovementY = ctx.InitialJumpVelocity * 0.5f;   
+
     }
 }
 
