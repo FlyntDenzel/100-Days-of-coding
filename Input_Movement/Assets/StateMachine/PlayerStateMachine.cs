@@ -37,6 +37,11 @@ public class PlayerStateMachine : MonoBehaviour
     public float currentMovementY {get{return currentMovement.y;} set{currentMovement.y =value;}}
     public float InitialJumpVelocity {get {return initialJumpVelocity;}}
     public bool IsjumpPressed { get {return isJumpPressed;}}
+    public float GroundedGravity {get{return groundedGravity;} set{groundedGravity = value;}}
+    public float PreviousYVelocity {get{return previousYVelocity;} set{previousYVelocity = value;}}
+    public float NewYVelocity {get{return newYVelocity;} set{newYVelocity = value;}}
+    public float NextYVelocity {get{return nextYVelocity;} set{nextYVelocity = value;}}
+    public float Gravity {get{return gravity;} set{gravity = value;}}
 
 
     //declaring a getter setter nethods

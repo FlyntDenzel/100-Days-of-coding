@@ -16,7 +16,13 @@ public class PlayerJumpState : PlayerBaseState
         CheckSwitchState();
     }
     public override void ExitState(){
-        
+            ctx.Animator.SetBool("isJumping", false);
+            ctx.GroundedGravity = -0.5f;
+            ctx.PreviousYVelocity = ctx.currentMovementY;
+            ctx.NewYVelocity = ctx.currentMovementY + (ctx.Gravity * Time.deltaTime);
+            ctx.NextYVelocity = (ctx.PreviousYVelocity + ctx.NextYVelocity) * 0.5f;
+            ctx.currentMovementY = ctx.NextYVelocity;
+            ctx.currentMovementY = ctx.NextYVelocity;
     }
     public override void CheckSwitchState(){
         
