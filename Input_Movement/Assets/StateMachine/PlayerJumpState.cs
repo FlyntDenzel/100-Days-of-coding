@@ -25,7 +25,10 @@ public class PlayerJumpState : PlayerBaseState
             ctx.currentMovementY = ctx.NextYVelocity;
     }
     public override void CheckSwitchState(){
-        
+        if (ctx.CharacterController.isGrounded)
+        {
+            SwitchState(factory.Grounded());
+        }
     }
     public override void InitializeSubState(){
         

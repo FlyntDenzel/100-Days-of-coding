@@ -11,6 +11,8 @@ public class PlayerStateMachine : MonoBehaviour
     Vector2 currentMovementInput;
     CharacterController characterController;
 
+  
+
     //creates a 3d vector for movement
     Vector3 currentMovement;
     Vector3 currentRunMovement;
@@ -42,6 +44,7 @@ public class PlayerStateMachine : MonoBehaviour
     public float NewYVelocity {get{return newYVelocity;} set{newYVelocity = value;}}
     public float NextYVelocity {get{return nextYVelocity;} set{nextYVelocity = value;}}
     public float Gravity {get{return gravity;} set{gravity = value;}}
+    public float CharacterController {get{return characterController;}}
 
 
     //declaring a getter setter nethods
@@ -142,4 +145,6 @@ public class PlayerStateMachine : MonoBehaviour
         //disable the callback function
         playerInput.CharacterControls.Disable();    
     }
+
+
 }
